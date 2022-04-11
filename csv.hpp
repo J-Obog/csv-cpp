@@ -2,14 +2,15 @@
 #include <vector>
 #include <string>
 
-std::vector<std::string> split_commas(const std::string& s) {
+std::vector<std::string> split_str(const std::string& s, char delim) {
     std::vector<std::string> v; 
     std::string buf; 
     int pos = 0; 
 
     while(pos < s.length()) {
-        if(s[pos] == ',') {
-            v.push_back(buf);
+        if(s[pos] == delim) {
+            if(!buf.empty()) 
+                v.push_back(buf);
             buf.clear(); 
         } else {
             buf += s[pos++];
@@ -28,7 +29,7 @@ class CSVRow {
         CSVRow() = default; 
         ~CSVRow() = default; 
         CSVRow(const std::string& s) {
-            _vec = split_commas(s);
+            _vec = split_str(s, ',');
             _raw = s;  
         }
 }; 
