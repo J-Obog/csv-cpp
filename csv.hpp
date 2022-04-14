@@ -49,7 +49,7 @@ class CSV {
         void _set_headers() {
             if(!_rows.empty()) {
                 int count = 0; 
-                
+
                 for(std::string& s: _rows[0].get_cols()) 
                     _hmap.insert({s, count++}); 
             }
@@ -59,7 +59,7 @@ class CSV {
         CSV() = default; 
         ~CSV() = default; 
         
-        CSV(std::string& s) {
+        void from_string(std::string& s) {
             for(std::string& txt: split_str(s, '\n'))
                 _rows.push_back(CSVRow(txt));                 
 
