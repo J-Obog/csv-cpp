@@ -6,17 +6,17 @@
 typedef std::unordered_map<std::string, int> header_map; 
 typedef std::vector<std::string> str_vec; 
 
-str_vec split_str(std::string& s, char delim) {
+str_vec split_str(std::string& str, char delim) {
     str_vec v; 
     std::string buf; 
 
-    for(char& c: s) {
-        if(c == delim) {
+    for(char& chr: str) {
+        if(chr == delim) {
             if(!buf.empty())
                 v.push_back(buf);
             buf.clear(); 
         } else {
-            buf += c; 
+            buf += chr; 
         }
     }
 
@@ -32,8 +32,8 @@ class CSVRow {
         CSVRow() = default; 
         ~CSVRow() = default; 
         
-        CSVRow(std::string& s) {
-            _cols = split_str(s, ',');
+        CSVRow(std::string& str) {
+            _cols = split_str(str, ',');
         }
 
         str_vec get_cols() const {
@@ -49,9 +49,9 @@ class CSV {
         void _set_headers() {
             if(!_rows.empty()) {
                 int count = 0; 
-
-                for(std::string& s: _rows[0].get_cols()) 
-                    _hmap.insert({s, count++}); 
+                
+                for(std::string& col: _rows[0].get_cols()) 
+                    _hmap.insert({col, count++}); 
             }
         }
 
@@ -59,10 +59,12 @@ class CSV {
         CSV() = default; 
         ~CSV() = default; 
         
-        void from_string(std::string& s) {
-            for(std::string& txt: split_str(s, '\n'))
-                _rows.push_back(CSVRow(txt));                 
-
+        void from_string(std::string& str) {
+            str_vec rows = split_str(str, '\n'); 
+            
+            for(std::string& row: rows)
+                _rows.push_back(CSVRow(row));                 
+            
              _set_headers(); 
         }
 }; 
