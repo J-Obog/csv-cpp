@@ -23,6 +23,7 @@ str_vec split_str(std::string& str, char delim) {
     return v; 
 }
 
+
 class CSVRow {
     private:
         header_map* _hmap_ptr;  
@@ -30,34 +31,38 @@ class CSVRow {
         
     public:
         CSVRow(std::string& str) : _cols(split_str(str, ',')) {};
-
-        str_vec get_cols() const {
-            return _cols; 
-        }
+        str_vec get_cols() const { return _cols; }
 }; 
+
 
 class CSV {
     private:
         header_map _hmap; 
         std::vector<CSVRow> _rows; 
 
-        void _set_headers() {
-            if(!_rows.empty()) {
-                int count = 0; 
-                
-                for(std::string& col: _rows[0].get_cols()) 
-                    _hmap.insert({col, count++}); 
-            }
+    public:
+        void set_header(str_vec h_cols, bool upsert = false) {
+            int count = 0; 
+            
+            if(!upsert)
+                _hmap.clear(); 
+
+            for(std::string& col: h_cols)
+                _hmap[col] = count++; 
+        } 
+
+        void init_header() {
+            if(!_rows.empty())
+                set_header(_rows[0].get_cols(), true);
         }
 
-    public:
         void from_string(std::string& str) {
             str_vec rows = split_str(str, '\n'); 
             
             for(std::string& row: rows)
-                _rows.push_back(CSVRow(row));                 
-            
-             _set_headers(); 
+                _rows.push_back(CSVRow(row));                
+
+            init_header();  
         }
 
         void from_file(std::string& fname) {
@@ -68,7 +73,8 @@ class CSV {
                 while(std::getline(file, line))
                     _rows.push_back(CSVRow(line));
             }
-            
-            file.close(); 
+
+            file.close();
+            init_header();  
         }
 }; 
