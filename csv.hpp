@@ -2,6 +2,7 @@
 #include <vector>
 #include <unordered_map>
 #include <string>
+#include <fstream>
 
 typedef std::unordered_map<std::string, int> header_map; 
 typedef std::vector<std::string> str_vec; 
@@ -29,9 +30,6 @@ class CSVRow {
         str_vec _cols;
         
     public:
-        CSVRow() = default; 
-        ~CSVRow() = default; 
-        
         CSVRow(std::string& str) {
             _cols = split_str(str, ',');
         }
@@ -56,9 +54,6 @@ class CSV {
         }
 
     public:
-        CSV() = default; 
-        ~CSV() = default; 
-        
         void from_string(std::string& str) {
             str_vec rows = split_str(str, '\n'); 
             
@@ -66,5 +61,17 @@ class CSV {
                 _rows.push_back(CSVRow(row));                 
             
              _set_headers(); 
+        }
+
+        void from_file(std::string& fname) {
+            std::ifstream file(fname, std::ios::in); 
+            std::string line; 
+
+            if(file.is_open()) {
+                while(std::getline(file, line))
+                    _rows.push_back(CSVRow(line));
+            }
+            
+            file.close(); 
         }
 }; 
