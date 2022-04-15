@@ -69,12 +69,13 @@ class CSV {
             std::ifstream file(fname, std::ios::in); 
             std::string line; 
 
-            if(file.is_open()) {
+            if(file.is_open())
                 while(std::getline(file, line))
                     _rows.push_back(CSVRow(line));
-            }
 
             file.close();
             init_header();  
         }
+
+        const CSVRow& operator[] (int rnum) const { return _rows[rnum]; }
 }; 
