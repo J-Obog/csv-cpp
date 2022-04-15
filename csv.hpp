@@ -31,7 +31,8 @@ class CSVRow {
         
     public:
         CSVRow(std::string& str) : _cols(split_str(str, ',')) {};
-        str_vec get_cols() const { return _cols; }
+        str_vec get_cols() const { return _cols; }; 
+        std::string operator[] (std::string cname) const { return _cols[_hmap_ptr->at(cname)]; }
 }; 
 
 
