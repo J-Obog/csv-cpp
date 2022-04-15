@@ -30,7 +30,7 @@ class CSVRow {
         str_vec _cols;
         
     public:
-        CSVRow(std::string& str) : _cols(split_str(str, ',')) {};
+        CSVRow(std::string& str, header_map* hmap_ptr = nullptr) : _cols(split_str(str, ',')), _hmap_ptr(hmap_ptr) {};
         str_vec get_cols() const { return _cols; }; 
         std::string operator[] (std::string cname) const { return _cols[_hmap_ptr->at(cname)]; }
 }; 
@@ -54,14 +54,14 @@ class CSV {
 
         void init_header() {
             if(!_rows.empty())
-                set_header(_rows[0].get_cols(), true);
+                set_header(_rows[0].get_cols());
         }
 
         void from_string(std::string& str) {
             str_vec rows = split_str(str, '\n'); 
             
             for(std::string& row: rows)
-                _rows.push_back(CSVRow(row));                
+                _rows.push_back(CSVRow(row, &_hmap));                
 
             init_header();  
         }
@@ -72,7 +72,7 @@ class CSV {
 
             if(file.is_open())
                 while(std::getline(file, line))
-                    _rows.push_back(CSVRow(line));
+                    _rows.push_back(CSVRow(line, &_hmap));
 
             file.close();
             init_header();  
