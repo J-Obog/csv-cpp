@@ -20,7 +20,6 @@ str_vec split_str(std::string& str, char delim) {
             buf += chr; 
         }
     }
-
     return v; 
 }
 
@@ -30,9 +29,7 @@ class CSVRow {
         str_vec _cols;
         
     public:
-        CSVRow(std::string& str) {
-            _cols = split_str(str, ',');
-        }
+        CSVRow(std::string& str) : _cols(split_str(str, ',')) {};
 
         str_vec get_cols() const {
             return _cols; 
