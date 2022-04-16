@@ -1,17 +1,17 @@
 #pragma once
-#include <vector>
-#include <unordered_map>
+#include <vector> 
+#include <unordered_map> 
 #include <string>
 #include <fstream>
 
-typedef std::unordered_map<std::string, int> header_map; 
-typedef std::vector<std::string> str_vec; 
+typedef std::unordered_map<std::string, int> hmap; 
+typedef std::vector<std::string> svec; 
 
-str_vec split_str(std::string& str, char delim) {
-    str_vec v; 
+svec split_str(const std::string& str, char delim) {
+    svec v; 
     std::string buf; 
 
-    for(char& chr: str) {
+    for(const char& chr: str) {
         if(chr == delim) {
             if(!buf.empty())
                 v.push_back(buf);
@@ -26,30 +26,30 @@ str_vec split_str(std::string& str, char delim) {
 
 class CSVRow {
     private:
-        header_map* _hmap_ptr;  
-        str_vec _cols;
+        hmap* _hmptr;  
+        svec _cols;
         
     public:
-        CSVRow(std::string& str, header_map* hmap_ptr = nullptr) : _cols(split_str(str, ',')), _hmap_ptr(hmap_ptr) {};
-        str_vec get_cols() const { return _cols; }; 
-        std::string operator[] (std::string cname) const { return _cols[_hmap_ptr->at(cname)]; }
+        CSVRow(const std::string& str, hmap* hmptr = nullptr) : _cols(split_str(str, ',')), _hmptr(hmptr) {};
+        svec get_cols() const { return _cols; }; 
+        std::string& operator[] (std::string cname) { return _cols[_hmptr->at(cname)]; }
 }; 
 
 
 class CSV {
     private:
-        header_map _hmap; 
+        hmap _hm; 
         std::vector<CSVRow> _rows; 
 
     public:
-        void set_header(str_vec h_cols, bool upsert = false) {
+        void set_header(svec h_cols, bool upsert = false) {
             int count = 0; 
             
             if(!upsert)
-                _hmap.clear(); 
+                _hm.clear(); 
 
             for(std::string& col: h_cols)
-                _hmap[col] = count++; 
+                _hm[col] = count++; 
         } 
 
         void init_header() {
@@ -58,10 +58,10 @@ class CSV {
         }
 
         void from_string(std::string& str) {
-            str_vec rows = split_str(str, '\n'); 
+            svec rows = split_str(str, '\n'); 
             
             for(std::string& row: rows)
-                _rows.push_back(CSVRow(row, &_hmap));                
+                _rows.push_back(CSVRow(row, &_hm));                
 
             init_header();  
         }
@@ -72,11 +72,11 @@ class CSV {
 
             if(file.is_open())
                 while(std::getline(file, line))
-                    _rows.push_back(CSVRow(line, &_hmap));
+                    _rows.push_back(CSVRow(line, &_hm));
 
             file.close();
             init_header();  
         }
-
+        
         const CSVRow& operator[] (int rnum) const { return _rows[rnum]; }
 }; 
