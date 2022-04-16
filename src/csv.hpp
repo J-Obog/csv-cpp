@@ -53,7 +53,7 @@ class CSV {
         } 
 
         void init_header() {
-            if(!_rows.empty())
+            if(!_rows.empty()) 
                 set_header(_rows[0].get_cols());
         }
 
