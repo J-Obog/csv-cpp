@@ -25,9 +25,15 @@ std::vector<std::string> split_str(const std::string& str, char delim) {
 class Row {
     private:
         std::vector<std::string>& _dref;
+        const std::unordered_map<std::string, int>* _hmptr; 
 
     public:
-        Row(std::vector<std::string>& dref) : _dref(dref) {};
+        Row(std::vector<std::string>& dref) : _dref(dref) {}
+        Row(std::vector<std::string>& dref, const std::unordered_map<std::string, int>* hmptr) : _dref(dref), _hmptr(hmptr) {}
+
+        std::string& operator[] (const std::string& hcol) {
+            return _dref[_hmptr->at(hcol)]; 
+        }
 };
 
 
@@ -51,5 +57,5 @@ class CSV {
                 _data.push_back(split_str(line, ','));
         }
         
-        Row operator[] (int idx) { return Row(_data[idx]); }
+        Row operator[] (int idx) { return Row(_data[idx], &_hmap); }
 }; 
