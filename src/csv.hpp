@@ -22,21 +22,19 @@ std::vector<std::string> split_str(const std::string& str, char delim) {
 }
 
 
-/*class CSVRow {
+class Row {
     private:
-        hmap* _hmptr;  
-        std::vector<std::string> _cols;
-        
+        std::vector<std::string>& _vref;
+
     public:
-        CSVRow(const std::string& str, hmap* hmptr = nullptr) : _cols(split_str(str, ',')), _hmptr(hmptr) {};
-        std::vector<std::string> get_cols() const { return _cols; }; 
-        std::string& operator[] (std::string cname) { return _cols[_hmptr->at(cname)]; }
-};*/ 
+        Row(std::vector<std::string>& vref) : _vref(vref) {};
+};
 
 
 class CSV {
     private:
-        std::vector<std::vector<std::string>> _data; 
+        std::vector<std::vector<std::string>> _data;
+
     public:
         CSV(const std::string& str) {
             for(std::string& s: split_str(str, '\n'))
@@ -50,5 +48,5 @@ class CSV {
                 _data.push_back(split_str(line, ','));
         }
         
-        //const CSVRow& operator[] (int rnum) const { return _rows[rnum]; }
+        Row operator[] (int idx) { return Row(_data[idx]); }
 }; 
