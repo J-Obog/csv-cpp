@@ -4,11 +4,9 @@
 #include <string>
 #include <fstream>
 
-typedef std::unordered_map<std::string, int> hmap; 
-typedef std::vector<std::string> svec; 
 
-svec split_str(const std::string& str, char delim) {
-    svec v; 
+std::vector<std::string> split_str(const std::string& str, char delim) {
+    std::vector<std::string> v; 
     std::string buf; 
 
     for(const char& chr: str) {
@@ -24,54 +22,33 @@ svec split_str(const std::string& str, char delim) {
 }
 
 
-class CSVRow {
+/*class CSVRow {
     private:
         hmap* _hmptr;  
-        svec _cols;
+        std::vector<std::string> _cols;
         
     public:
         CSVRow(const std::string& str, hmap* hmptr = nullptr) : _cols(split_str(str, ',')), _hmptr(hmptr) {};
-        svec get_cols() const { return _cols; }; 
+        std::vector<std::string> get_cols() const { return _cols; }; 
         std::string& operator[] (std::string cname) { return _cols[_hmptr->at(cname)]; }
-}; 
+};*/ 
 
 
 class CSV {
     private:
-        hmap _hm; 
-        std::vector<CSVRow> _rows; 
-
+        std::vector<std::vector<std::string>> _data; 
     public:
-        void set_header(svec h_cols, bool upsert = false) {
-            int count = 0; 
-            
-            if(!upsert)
-                _hm.clear(); 
-
-            for(std::string& col: h_cols)
-                _hm[col] = count++; 
-        } 
-
-        void init_header() {
-            if(!_rows.empty()) 
-                set_header(_rows[0].get_cols());
-        }
-
         CSV(const std::string& str) {
             for(std::string& s: split_str(str, '\n'))
-                _rows.push_back(CSVRow(s, &_hm));                
-
-            init_header();  
+                _data.push_back(split_str(s, ',')); 
         }
 
         CSV(std::ifstream& file) {
             std::string line; 
             
             while(std::getline(file, line))
-                _rows.push_back(CSVRow(line, &_hm));
-
-            init_header();  
+                _data.push_back(split_str(line, ','));
         }
         
-        const CSVRow& operator[] (int rnum) const { return _rows[rnum]; }
+        //const CSVRow& operator[] (int rnum) const { return _rows[rnum]; }
 }; 
