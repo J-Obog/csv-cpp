@@ -4,6 +4,7 @@
 #include <string>
 #include <fstream>
 
+namespace csvcpp { 
 
 std::vector<std::string> split_str(const std::string& str, char delim) {
     std::vector<std::string> v; 
@@ -59,3 +60,5 @@ class CSV {
         
         Row operator[] (size_t idx) { return Row(_data[idx], &_hmap); }
 }; 
+
+} //end of csvcpp namespace
