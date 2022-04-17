@@ -25,11 +25,11 @@ std::vector<std::string> split_str(const std::string& str, char delim) {
 class Row {
     private:
         std::vector<std::string>& _dref;
-        const std::unordered_map<std::string, int>* _hmptr; 
+        const std::unordered_map<std::string, size_t>* _hmptr; 
 
     public:
         Row(std::vector<std::string>& dref) : _dref(dref) {}
-        Row(std::vector<std::string>& dref, const std::unordered_map<std::string, int>* hmptr) : _dref(dref), _hmptr(hmptr) {}
+        Row(std::vector<std::string>& dref, const std::unordered_map<std::string, size_t>* hmptr) : _dref(dref), _hmptr(hmptr) {}
 
         std::string& operator[] (const std::string& hcol) {
             return _dref[_hmptr->at(hcol)]; 
@@ -40,10 +40,10 @@ class Row {
 class CSV {
     private:
         std::vector<std::vector<std::string>> _data;
-        std::unordered_map<std::string, int> _hmap; 
+        std::unordered_map<std::string, size_t> _hmap; 
 
     public:
-        const static int HEADER = 0; 
+        const static std::uint8_t HEADER = 0; 
 
         CSV(const std::string& str) {
             for(std::string& s: split_str(str, '\n'))
@@ -57,5 +57,5 @@ class CSV {
                 _data.push_back(split_str(line, ','));
         }
         
-        Row operator[] (int idx) { return Row(_data[idx], &_hmap); }
+        Row operator[] (size_t idx) { return Row(_data[idx], &_hmap); }
 }; 
