@@ -57,24 +57,19 @@ class CSV {
                 set_header(_rows[0].get_cols());
         }
 
-        void from_string(std::string& str) {
-            svec rows = split_str(str, '\n'); 
-            
-            for(std::string& row: rows)
-                _rows.push_back(CSVRow(row, &_hm));                
+        CSV(const std::string& str) {
+            for(std::string& s: split_str(str, '\n'))
+                _rows.push_back(CSVRow(s, &_hm));                
 
             init_header();  
         }
 
-        void from_file(std::string& fname) {
-            std::ifstream file(fname, std::ios::in); 
+        CSV(std::ifstream& file) {
             std::string line; 
+            
+            while(std::getline(file, line))
+                _rows.push_back(CSVRow(line, &_hm));
 
-            if(file.is_open())
-                while(std::getline(file, line))
-                    _rows.push_back(CSVRow(line, &_hm));
-
-            file.close();
             init_header();  
         }
         
