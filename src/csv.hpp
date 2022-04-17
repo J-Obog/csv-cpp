@@ -24,18 +24,21 @@ std::vector<std::string> split_str(const std::string& str, char delim) {
 
 class Row {
     private:
-        std::vector<std::string>& _vref;
+        std::vector<std::string>& _dref;
 
     public:
-        Row(std::vector<std::string>& vref) : _vref(vref) {};
+        Row(std::vector<std::string>& dref) : _dref(dref) {};
 };
 
 
 class CSV {
     private:
         std::vector<std::vector<std::string>> _data;
+        std::unordered_map<std::string, int> _hmap; 
 
     public:
+        const static int HEADER = 0; 
+
         CSV(const std::string& str) {
             for(std::string& s: split_str(str, '\n'))
                 _data.push_back(split_str(s, ',')); 
