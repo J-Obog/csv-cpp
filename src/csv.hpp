@@ -23,6 +23,7 @@ class CSV {
             std::string rbuf, cbuf;
             std::stringstream lnss; 
             
+            //csv parsing
             while(std::getline(istr, rbuf, _params.newline)) {
                 _data.push_back({});
                 lnss << rbuf;
@@ -32,6 +33,12 @@ class CSV {
                 }
         
                 lnss.clear(); 
+            }
+
+            //setting headers
+            if(_params.setHeaders && (_data.size() > 0)) {
+                for(size_t i = 0; i < _data[0].size(); i++) 
+                    _hmap[_data[0][i]] = i; 
             }
         } 
 
