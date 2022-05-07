@@ -7,37 +7,42 @@
 
 namespace csvcpp { 
 
+struct ParseParams {
+    char delim = ',';
+    char newline = '\n';
+    bool setHeaders = true;  
+}; 
+
 class CSV {
     private:
         std::vector<std::vector<std::string>> _data;
-        std::unordered_map<std::string, size_t> _hmap; 
+        std::unordered_map<std::string, size_t> _hmap;
+        ParseParams _params;  
         
-        void parseCSV(std::istream& istr, char delim, char newline) {
+        void parseCSV(std::istream& istr) {
             std::string rbuf, cbuf;
             std::stringstream lnss; 
             
-            while(getline(istr, rbuf, newline)) {
+            while(std::getline(istr, rbuf, _params.newline)) {
                 _data.push_back({});
                 lnss << rbuf;
         
-                while(getline(lnss, cbuf, delim)) {
+                while(std::getline(lnss, cbuf, _params.delim)) {
                     _data[_data.size() - 1].push_back(cbuf);       
                 }
         
                 lnss.clear(); 
             }
-        }
-
+        } 
 
     public:
-
-        CSV(const std::string& str, char delim = ',', char newline = '\n') {
+        CSV(const std::string& str, const ParseParams& params) : _params(params) {
             std::stringstream ss(str); 
-            parseCSV(ss, delim, newline); 
+            parseCSV(ss); 
         }
 
-        CSV(std::ifstream& file, char delim = ',', char newline = '\n') {   
-            parseCSV(file, delim, newline); 
+        CSV(std::ifstream& file, const ParseParams& params) : _params(params) {   
+            parseCSV(file); 
         }
 }; 
 
