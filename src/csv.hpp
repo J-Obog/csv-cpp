@@ -51,6 +51,14 @@ class CSV {
         CSV(std::ifstream& file, const ParseParams& params) : _params(params) {   
             parseCSV(file); 
         }
+
+        std::vector<std::string>& getRow(size_t row) {
+            return _data[row]; 
+        }   
+
+        void setRow(size_t row, std::vector<std::string>& vals) {
+            _data[row] = vals; 
+        }
 }; 
 
 } //end of csvcpp namespace
