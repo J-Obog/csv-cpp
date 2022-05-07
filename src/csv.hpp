@@ -3,33 +3,36 @@
 #include <unordered_map> 
 #include <string>
 #include <fstream>
+#include <sstream>
 
 namespace csvcpp { 
-
-std::vector<std::string> split_str(const std::string& str, char delim) {
-    std::vector<std::string> v; 
-    std::string buf; 
-
-    for(const char& chr: str) {
-        if(chr == delim) {
-            if(!buf.empty())
-                v.push_back(buf);
-            buf.clear(); 
-        } else {
-            buf += chr; 
-        }
-    }
-    return v; 
-}
 
 class CSV {
     private:
         std::vector<std::vector<std::string>> _data;
         std::unordered_map<std::string, size_t> _hmap; 
+        
+        void parseCSV(std::istream& istr, char delim, char newline) {
+            std::string rbuf; 
+            std::string cbuf;
+            std::stringstream lnss; 
+            
+            while(getline(istr, rbuf, newline)) {
+                _data.push_back({});
+                lnss << rbuf;
+        
+                while(getline(lnss, cbuf, delim)) {
+                    _data[_data.size() - 1].push_back(cbuf);       
+                }
+        
+                lnss.clear(); 
+            }
+        }
+
 
     public:
 
-        CSV(const std::string& str) {
+        /*CSV(const std::string& str) {
             for(std::string& s: split_str(str, '\n'))
                 _data.push_back(split_str(s, ',')); 
         }
@@ -39,7 +42,7 @@ class CSV {
             
             while(std::getline(file, line))
                 _data.push_back(split_str(line, ','));
-        }
+        }*/
 }; 
 
 } //end of csvcpp namespace
