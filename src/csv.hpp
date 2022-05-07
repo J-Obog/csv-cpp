@@ -13,8 +13,7 @@ class CSV {
         std::unordered_map<std::string, size_t> _hmap; 
         
         void parseCSV(std::istream& istr, char delim, char newline) {
-            std::string rbuf; 
-            std::string cbuf;
+            std::string rbuf, cbuf;
             std::stringstream lnss; 
             
             while(getline(istr, rbuf, newline)) {
@@ -32,17 +31,14 @@ class CSV {
 
     public:
 
-        /*CSV(const std::string& str) {
-            for(std::string& s: split_str(str, '\n'))
-                _data.push_back(split_str(s, ',')); 
+        CSV(const std::string& str, char delim = ',', char newline = '\n') {
+            std::stringstream ss(str); 
+            parseCSV(ss, delim, newline); 
         }
 
-        CSV(std::ifstream& file) {
-            std::string line; 
-            
-            while(std::getline(file, line))
-                _data.push_back(split_str(line, ','));
-        }*/
+        CSV(std::ifstream& file, char delim = ',', char newline = '\n') {   
+            parseCSV(file, delim, newline); 
+        }
 }; 
 
 } //end of csvcpp namespace
