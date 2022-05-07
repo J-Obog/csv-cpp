@@ -22,29 +22,12 @@ std::vector<std::string> split_str(const std::string& str, char delim) {
     return v; 
 }
 
-
-class Row {
-    private:
-        std::vector<std::string>& _dref;
-        const std::unordered_map<std::string, size_t>* _hmptr; 
-
-    public:
-        Row(std::vector<std::string>& dref) : _dref(dref) {}
-        Row(std::vector<std::string>& dref, const std::unordered_map<std::string, size_t>* hmptr) : _dref(dref), _hmptr(hmptr) {}
-
-        std::string& operator[] (const std::string& hcol) {
-            return _dref[_hmptr->at(hcol)]; 
-        }
-};
-
-
 class CSV {
     private:
         std::vector<std::vector<std::string>> _data;
         std::unordered_map<std::string, size_t> _hmap; 
 
     public:
-        const static std::uint8_t HEADER = 0; 
 
         CSV(const std::string& str) {
             for(std::string& s: split_str(str, '\n'))
@@ -57,8 +40,6 @@ class CSV {
             while(std::getline(file, line))
                 _data.push_back(split_str(line, ','));
         }
-        
-        Row operator[] (size_t idx) { return Row(_data[idx], &_hmap); }
 }; 
 
 } //end of csvcpp namespace
