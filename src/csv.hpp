@@ -28,10 +28,9 @@ class CSV {
                 _data.push_back({});
                 lnss << rbuf;
         
-                while(std::getline(lnss, cbuf, _params.delim)) {
+                while(std::getline(lnss, cbuf, _params.delim))                     
                     _data[_data.size() - 1].push_back(cbuf);       
-                }
-        
+
                 lnss.clear(); 
             }
 
@@ -52,7 +51,7 @@ class CSV {
             parseCSV(file); 
         }
 
-        std::vector<std::string>& getRow(size_t row) {
+        const std::vector<std::string>& getRow(size_t row) const {
             return _data[row]; 
         }   
 
