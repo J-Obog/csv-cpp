@@ -7,12 +7,14 @@
 
 namespace csvcpp { 
 
+//parsing parameters
 struct ParseParams {
     char delim = ',';
     char newline = '\n';
     bool setHeaders = true;  
 }; 
 
+//csv reader& writer
 class CSV {
     private:
         std::vector<std::vector<std::string>> _data;
@@ -47,7 +49,7 @@ class CSV {
             parseCSV(ss); 
         }
 
-        CSV(std::ifstream& file, const ParseParams& params) : _params(params) {   
+        CSV(std::istream& file, const ParseParams& params) : _params(params) {   
             parseCSV(file); 
         }
 
