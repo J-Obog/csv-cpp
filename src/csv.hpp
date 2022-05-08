@@ -11,7 +11,7 @@ namespace csvcpp {
 struct ParseParams {
     char delim = ',';
     char newline = '\n';
-    bool setHeaders = true;  
+    bool headers = true;  
 }; 
 
 //csv reader& writer
@@ -37,7 +37,7 @@ class CSV {
             }
 
             //setting headers
-            if(_params.setHeaders && (_data.size() > 0)) {
+            if(_params.headers && (_data.size() > 0)) {
                 for(size_t i = 0; i < _data[0].size(); i++) 
                     _hmap[_data[0][i]] = i; 
             }
@@ -61,19 +61,19 @@ class CSV {
             _data[row] = vals; 
         }
 
-        const std::string& getCol(size_t row, size_t col) const {
+        const std::string& getColumn(size_t row, size_t col) const {
             return _data[row][col]; 
         }
 
-        const std::string& getCol(size_t row, const std::string& header) const {
+        const std::string& getColumn(size_t row, const std::string& header) const {
             _data[row][_hmap.at(header)]; 
         }
 
-        void setCol(size_t row, size_t col, const std::string& val) {
+        void setColumn(size_t row, size_t col, const std::string& val) {
             _data[row][col] = val; 
         }
 
-        void setCol(size_t row, const std::string& header, const std::string& val) {
+        void setColumn(size_t row, const std::string& header, const std::string& val) {
             _data[row][_hmap.at(header)] = val;
         }
 
