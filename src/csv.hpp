@@ -76,6 +76,14 @@ class CSV {
         void setCol(size_t row, const std::string& header, const std::string& val) {
             _data[row][_hmap.at(header)] = val;
         }
+
+        void insertRow(size_t row, std::vector<std::string>& vals) {
+            _data.insert(_data.begin() + row, vals); 
+        }
+
+        void deleteRow(size_t row) {
+            _data.erase(_data.begin() + row); 
+        }
 }; 
 
 } //end of csvcpp namespace
