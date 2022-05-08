@@ -66,6 +66,14 @@ class CSV {
         const std::string& getCol(size_t row, const std::string& header) const {
             _data[row][_hmap.at(header)]; 
         }
+
+        void setCol(size_t row, size_t col, const std::string& val) {
+            _data[row][col] = val; 
+        }
+
+        void setCol(size_t row, const std::string& header, const std::string& val) {
+            _data[row][_hmap.at(header)] = val;
+        }
 }; 
 
 } //end of csvcpp namespace
